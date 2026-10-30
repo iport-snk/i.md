@@ -16,10 +16,10 @@
 ## 1. Скріншоти та карта елементів інтерфейсу
 
 ### Скріншот 1: Категорія «НОВІ», Вкладка «БЭКЛОГ»
-![Вкладка Бэклог](file:///c:/Projects/icrm/test-mysql/icrm-server/docs.md/orders_backlog.png)
+![Вкладка Бэклог](./orders_backlog.png)
 
 ### Скріншот 2: Категорія «НОВІ», Вкладка «СОГЛАСОВАНО»
-![Вкладка Согласовано](file:///c:/Projects/icrm/test-mysql/icrm-server/docs.md/orders_confirmed.png)
+![Вкладка Согласовано](./orders_confirmed.png)
 
 ---
 

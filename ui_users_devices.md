@@ -10,7 +10,7 @@
 
 ## 1. Карта нумерації елементів на скріншоті
 
-![Розмітка елементів UI](file:///c:/Projects/icrm/test-mysql/icrm-server/docs.md/annotated_devices.png)
+![Розмітка елементів UI](./annotated_devices.png)
 
 ---
 
@@ -113,7 +113,7 @@ LEFT JOIN pays p ON u.id = p.id;
 
 При натисканні на кнопку або текст оптичного термінала (елемент 6 у таблиці пристроїв) відкривається спеціалізоване діалогове вікно поглибленої діагностики лінії:
 
-![Модальне вікно діагностики ONU та історії загасання](file:///c:/Projects/icrm/test-mysql/icrm-server/docs.md/signal_monitor_modal.png)
+![Модальне вікно діагностики ONU та історії загасання](./signal_monitor_modal.png)
 
 ### 4.1. Елементи інтерфейсу та параметри діагностики
 

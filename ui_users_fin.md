@@ -9,7 +9,7 @@
 
 ## 1. Карта нумерації елементів на скріншоті
 
-![Розмітка елементів UI](file:///c:/Projects/icrm/test-mysql/icrm-server/docs.md/annotated_ui.png)
+![Розмітка елементів UI](./annotated_ui.png)
 
 ---
 
@@ -80,7 +80,7 @@
 
 При натисканні на іконку олівця біля рядка **«Тарифний План»** (елемент 11) відкривається модальне вікно вибору доступних тарифів:
 
-![Модальне вікно вибору тарифу](file:///c:/Projects/icrm/test-mysql/icrm-server/docs.md/tariff_modal.png)
+![Модальне вікно вибору тарифу](./tariff_modal.png)
 
 ### 5.1. Елементи керування модального вікна ([`Tariff.vue`](file:///c:/Projects/icrm/ui.2.1/src/components/Tariff.vue))
 

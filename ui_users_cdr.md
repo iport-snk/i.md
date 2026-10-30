@@ -10,7 +10,7 @@
 
 ## 1. Карта нумерації елементів на скріншоті
 
-![Розмітка елементів UI](file:///c:/Projects/icrm/test-mysql/icrm-server/docs.md/annotated_cdr.png)
+![Розмітка елементів UI](./annotated_cdr.png)
 
 ---
 
