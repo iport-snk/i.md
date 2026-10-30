@@ -12,3 +12,4 @@
   * [Дзвінки (CDR)](ui_users_cdr.md)
   * [Задачі та Jira](ui_users_issues.md)
 * [Заявки на підключення](ui_orders.md)
+* [Карта мережі (i-map / PON)](ui_map.md)
