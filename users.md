@@ -1,3 +1,10 @@
+---
+layout:
+  width: wide
+  outline:
+    visible: false
+---
+
 # Опис абонентських даних (`bill` / `bro` / `ibill`)
 
 Цей документ описує структуру абонентських даних у білінговій базі даних (**NoDeny** — підключення `db.bill`, `db.bro`, `db.ibill` у [`db.js`](file:///c:/Projects/icrm/test-mysql/icrm-server/db.js) та [`env.js`](file:///c:/Projects/icrm/test-mysql/icrm-server/env.js)).
