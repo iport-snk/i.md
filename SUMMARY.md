@@ -8,7 +8,6 @@
 ### Користувацький інтерфейс (UI)
 * [Пошук абонентів](ui_users_search.md)
 * [Фінанси абонента](ui_users_fin.md)
-* [Всі платежі (UI Payments)](ui-user-payments.md)
 * [Пристрої та ONU](ui_users_devices.md)
 * [Дзвінки (CDR)](ui_users_cdr.md)
 * [Задачі та Jira](ui_users_issues.md)
