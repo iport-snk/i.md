@@ -1,0 +1,16 @@
+# Summary
+
+### Загальна архітектура
+* [Огляд системи](README.md)
+* [База даних абонентів](users.md)
+* [Авторизація та білінг (AAA)](aaa.md)
+* [Платежі та звірка (pays)](pays.md)
+
+### Користувацький інтерфейс (UI)
+* [Пошук абонентів](ui_users_search.md)
+* [Фінанси абонента](ui_users_fin.md)
+* [Всі платежі (UI Payments)](ui-user-payments.md)
+* [Пристрої та ONU](ui_users_devices.md)
+* [Дзвінки (CDR)](ui_users_cdr.md)
+* [Задачі та Jira](ui_users_issues.md)
+* [Заявки на підключення](ui_orders.md)
