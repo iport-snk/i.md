@@ -2,6 +2,17 @@
 
 ### Системи
 * [Сайт і кабінет абонента](systems/customer.md)
+* [i-map — карта мережі](systems/imap/README.md)
+  * [Вхід і налаштування](systems/imap/start.md)
+  * [Карта мережі](systems/imap/map.md)
+  * [Картка муфти](systems/imap/box.md)
+  * [Кабелі та опори](systems/imap/cables.md)
+  * [PON-сигнали](systems/imap/signals.md)
+  * [Робочий день бригади](systems/imap/timesheet.md)
+  * [Для мережевого відділу](systems/imap/management.md)
+  * [Магістральна мережа](systems/imap/netmap.md)
+  * [Як влаштовано](systems/imap/technical.md)
+  * [Карта мережі та PON — елементи екранів](ui_map.md)
 * [AI-агент](systems/sandra-ai/README.md)
   * [Розмова](systems/sandra-ai/conversation.md)
   * [Що AI-агент робить сам](systems/sandra-ai/actions.md)
@@ -22,4 +33,4 @@
   * [Дзвінки (CDR)](ui_users_cdr.md)
   * [Задачі та Jira](ui_users_issues.md)
 * [Заявки на підключення](ui_orders.md)
-* [Карта мережі (i-map / PON)](ui_map.md)
+
