@@ -19,7 +19,8 @@
   * [Після дзвінка](systems/sandra-ai/after-call.md)
   * [Керування та надійність](systems/sandra-ai/management.md)
   * [Як влаштовано](systems/sandra-ai/technical.md)
-
+### Архітектура
+* [Сервери і віртуальні машини](architecture/infrastructure.md)
 ### iCRM — загальна архітектура
 * [База даних абонентів](users.md)
 * [Авторизація та білінг (AAA)](aaa.md)
