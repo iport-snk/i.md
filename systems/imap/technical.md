@@ -41,7 +41,6 @@ flowchart LR
     APP --> E443 --> ICRM
     LDB <-->|"реплікація"| E8443 --> COUCH
     APP -->|"вхід"| E86 --> IAUTH --> PG
-    APP -->|"WebSocket, живі авто"| TR
     APP --> GM
 
     ICRM -->|"токен, права"| PG
@@ -54,7 +53,7 @@ flowchart LR
     JIRA -->|"вебхук"| ICRM
     ICRM -->|"обладнання обʼєкта"| ONEC
     ONEC -->|"забирає закриті роботи<br/>/products/1c/jobs"| ICRM
-    ICRM -->|"треки, зупинки, події"| TR
+    ICRM -->|"позиція авто бригади"| TR
 ```
 
 | Складова | Адреса | Що робить для i-map |
@@ -64,12 +63,12 @@ flowchart LR
 | **CouchDB** | `172.16.252.57:5984` | топологія (`network`), задачі (`jira`), табелі (`timesheets`), вигрузка PON (`pon-new`), магістраль (`backbone`) |
 | **iCRM API** | `srv-app-1`, `172.16.252.51:82` | видає id обʼєктів, працює з Jira, тягне рівні з NOC, зберігає фото, рахує маршрути й зупинки |
 | **iauth** | `172.16.252.51:86`, база `auth` на `172.16.252.53` | вхід співробітника, видає токен `pgjwt` |
-| **MySQL `icrm`** | `172.16.252.40` | `map_objects` (номери й назви обʼєктів), `map_dictionary` (абревіатури населених пунктів), `timesheet` (план і статус листів), `users` (працівники) |
+| **MySQL `icrm`** | `172.16.252.40` | `map_objects` (номери й назви обʼєктів), `map_dictionary` (абревіатури населених пунктів), `timesheet` (план працівників), `users` (працівники) |
 | **MySQL `bill`** | `172.16.252.200`, репліка `172.16.252.204` | `users` — договори й ONU абонентів, `user_orders` — задачі для експорту в 1С, `p_street` — вулиці |
 | **NOC API** | `172.16.254.81` | `pon.php` — живе SNMP-опитування ОЛТа, `zabbix.php` — вигрузка ONU й історія рівнів |
 | **Jira** | `jira.iport.net.ua:8080` | задачі проєкту NET. Привʼязка до обʼєкта — поле `customfield_11000` = `ponbox:<id>` або `pole:<id>` |
 | **1С** | `172.16.252.21/IPORT/hs` | обладнання, списане на обʼєкт. Сам забирає з iCRM закриті роботи (`/products/1c/*`) |
-| **Traccar** | `172.16.252.88:8082`, ззовні `traccar.iport.net.ua` | GPS-трекери автомобілів |
+| **Traccar** | `172.16.252.88:8082`, ззовні `traccar.iport.net.ua` | GPS-трекери автомобілів: позиція машини бригади |
 | **iERP** | | бере закриті треки з `timesheets` і робить із них подорожні листи |
 
 ### Хто кого питає
@@ -79,9 +78,8 @@ flowchart LR
 | i-map | CouchDB | `a.iport.net.ua:8443` → `172.16.252.57:5984` | реплікація `network`, `jira`, `timesheets`, `pon-new` |
 | i-map | iCRM | `a.iport.net.ua` → `172.16.252.51:82` | усе, що потребує сервера. Заголовок `pgjwt` — токен співробітника |
 | i-map | iauth | `a.iport.net.ua:86` | вікно входу |
-| i-map | Traccar | `wss://traccar.iport.net.ua/api/socket` | живі координати авто (мережевий відділ) |
 | iCRM | PostgreSQL `auth` | `172.16.252.53:5432` | розшифрувати `pgjwt`: хто це, які права, логін Jira |
-| iCRM | MySQL `icrm` | `172.16.252.40:3306` | створення обʼєкта, центр населеного пункту, план працівників, статус листа |
+| iCRM | MySQL `icrm` | `172.16.252.40:3306` | створення обʼєкта, центр населеного пункту, план працівників |
 | iCRM | MySQL `bill` | `172.16.252.200` | запис у `user_orders` (експорт у 1С), довідник вулиць |
 | iCRM | MySQL `bill`, репліка | `172.16.252.204` | пошук договору, договір за MAC ONU, перевірка «вже в 1С» |
 | iCRM | CouchDB | `172.16.252.57:5984` | запис вигрузки PON, задач Jira, вулиць, магістралі, читання задач на день |
@@ -90,7 +88,7 @@ flowchart LR
 | Jira | iCRM | `POST /web-push/jira-hook` | кожна зміна задачі → документ у CouchDB `jira` |
 | iCRM | 1С | `172.16.252.21/IPORT/hs/equipment/object/<id>` | обладнання на обʼєкті |
 | 1С | iCRM | `/products/1c/jobs/<виконавець>`, `/products/1c/order-set/...` | забрати закриті роботи з `bill.user_orders` і позначити забраними — див. [box.md](box.md), «Передати виконану роботу в 1С» |
-| iCRM | Traccar API | `172.16.252.88:8082/api` | позиції, зупинки, події «трекер недоступний» |
+| iCRM | Traccar API | `172.16.252.88:8082/api` | остання позиція автомобіля бригади |
 | iERP | CouchDB | `172.16.252.57:5984` | читає `track.*` з `timesheets` |
 
 ### Фонові задачі iCRM, що наповнюють i-map
@@ -174,7 +172,7 @@ sequenceDiagram
 | Фото обʼєктів | iCRM, `public/ad/<id>` | при завантаженні |
 | Обладнання, списане на обʼєкт | 1С (`172.16.252.21/IPORT/hs`) через iCRM | при відкритті вкладки |
 | Черга робіт для 1С | iCRM, таблиця `user_orders` бази `bill` (`exprt = null` — не забрано, `1` — забрано) | рядок — при «Экспорт в 1С», `exprt = 1` — коли 1С забрав роботу |
-| План працівників, статус листа й коментар | iCRM, таблиця `timesheet` MySQL `icrm` | план — з табеля, статус — при перевірці |
+| План працівників | iCRM, таблиця `timesheet` MySQL `icrm` | з табеля |
 
 Вигрузка PON — це зріз моніторингу, а не замір наживо. Наживо рівні знімає
 лише кнопка оновлення на екрані сигналів: iCRM просить NOC API (`pon.php`), а той опитує ОЛТ по SNMP. Сам iCRM з ОЛТами напряму не працює.
@@ -189,7 +187,7 @@ sequenceDiagram
 | картка муфти, схема, затухання | будь-яка дія з Jira |
 | правка портів, сплітерів, звʼязків, опису | живе опитування сигналу, історія рівнів |
 | подорожній лист: старт, фініш, заправка | вибір автомобіля й задач на день |
-| | фото, обладнання 1С, треки Traccar |
+| | фото, обладнання 1С, позиція автомобіля |
 
 Зміни, зроблені без звʼязку, лежать у локальній базі й доїжджають на сервер
 самі, коли звʼязок зʼявляється.
@@ -279,7 +277,6 @@ async function path(node) {
 | Робота з Jira в картці | `src/components/PonParts.vue` |
 | PON-сигнали | `src/models/signals.js`, `src/components/Signals*.vue` |
 | Подорожній лист | `src/components/timesheet/`, `src/models/timesheet.js` |
-| Перевірка листів | `src/components/timesheet/RouteAdminDialog.vue`, `src/models/route-admin.js` |
 | Магістраль | `src/models/network-map.js`, `src/components/Backbone*.vue` |
 
 Як застосунок розпізнає, що ввели в пошук:
@@ -333,10 +330,6 @@ let criterion = phrase.includes('.')                ? 'contract'   // 274.661
 | `GET /jira/due-tasks/<ключ>` | задачі на день | вид `docs/assignee-due` бази `jira` + мітки регіонів з `jira/configs` | CouchDB |
 | `GET /timesheet/cars/<власник>` | машини й одометр | `timesheets/availableCars`, останній одометр — вид `selectedCar/car-odo` | CouchDB |
 | `GET /timesheet/planned-today-workers` | напарники | таблиця `timesheet` + `users` за сьогодні | MySQL `icrm` |
-| `POST /timesheet/track-path`, `/distance-track` | трек і пробіг | `GET /api/positions?deviceId=&from=&to=` | Traccar `.88:8082` |
-| `POST /timesheet/stops` | зупинки | звіт зупинок Traccar, поріг 10 хв | Traccar |
-| `POST /timesheet/disconnections` | трекер недоступний | `GET /api/reports/events?type=deviceUnknown&type=deviceOffline` | Traccar |
-| `POST /timesheet/save-comment` | статус і коментар листа | `update timesheet set status, comment, src = 'imap'` за датою й працівником | MySQL `icrm` |
 | `GET /map/traccar-gps/<id>` | позиція авто бригади | остання позиція пристрою | Traccar |
 | `GET /map/all-providers` | провайдери для карток | | MySQL |
 | `GET /map-network/backbone-list/…`, `POST /backbone-update`, `/backbone-delete` | магістраль | читання й запис документів | CouchDB `backbone` |
@@ -353,7 +346,7 @@ let criterion = phrase.includes('.')                ? 'contract'   // 274.661
 | Ознака в коді | Право | Що відкриває |
 |---|---|---|
 | `$architect` | `architect` | адміністративні режими карти, редагування всіх полів |
-| `$timesheetRead` | `timesheet-reports` | чужі подорожні листи, трекінг автомобілів |
+| `$timesheetRead` | `timesheet-reports` | те саме, що `architect`, для частини функцій |
 | `$changeAllowed` | один конкретний обліковий запис | додавання будинків у шарі «Квартирный» |
 
 У коді `admin` — це `$architect || $timesheetRead`.
