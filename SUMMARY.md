@@ -9,7 +9,6 @@
   * [Кабелі та опори](systems/imap/cables.md)
   * [PON-сигнали](systems/imap/signals.md)
   * [Робочий день бригади](systems/imap/timesheet.md)
-  * [Для мережевого відділу](systems/imap/management.md)
   * [Магістральна мережа](systems/imap/netmap.md)
   * [Як влаштовано](systems/imap/technical.md)
   * [Карта мережі та PON — елементи екранів](ui_map.md)
